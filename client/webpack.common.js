@@ -40,7 +40,7 @@ module.exports={
         filename:"[name].[contenthash].js",
         path:path.join(__dirname,'build'),
         publicPath:'/',
-        clean:true,
+        // clean:true,
     },
     
     optimization: {
@@ -60,7 +60,7 @@ module.exports={
       },
     
     resolve:{
-        alias: {      '@': path.resolve(__dirname, 'src'),    },
+        // alias: {      '@': path.resolve(__dirname, 'src'),    },
         extensions:['.js','.jsx','.css','.ts','.tsx','.svg','*.svg'],
         // modules:['node_modules'],
     },
@@ -86,7 +86,6 @@ module.exports={
                                 {
                                   corejs: 3,
                                   proposals: true,
-                                  useESmodules:true,
                                 },
 
                               ],
