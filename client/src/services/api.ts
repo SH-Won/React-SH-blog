@@ -22,15 +22,20 @@ export interface ArticleTypes {
     writer: string;
     _id: string;
 }
+export interface GetArticleParams{
+    category?:string;
+}
 export const getPosts = async () => {
     try {
         const response: AxiosResponse = await axios.get(BASE_URL + '/api/posts');
         return response.data as { postSize: number; posts: Post[] };
     } catch (e) {}
 };
-export const getArticles = async () => {
+export const getArticles = async (params : object) => {
+    const query = Object.entries(params).map(([key,value]) => key + '=' + value ).join('&');
+    const ENDPOINT = BASE_URL + '/api/posts/article?' + query;
     try {
-        const response: AxiosResponse = await axios.get(BASE_URL + '/api/posts/article');
+        const response: AxiosResponse = await axios.get(ENDPOINT);
         return response.data as { postSize: number; posts: ArticleTypes[] };
     } catch (e) {}
 };

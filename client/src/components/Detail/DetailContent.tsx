@@ -4,7 +4,8 @@ import { ArticleTypes } from '../../services/api';
 
 const ContentContainer = styled.div`
 margin:0 auto;
-width:90%;
+width:100%;
+
 `
 
 const DetailContent : React.FC<{data : React.ReactElement | null}> = ({data}) => {

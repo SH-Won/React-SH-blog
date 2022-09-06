@@ -2,6 +2,7 @@ import { useQuery, useQueryClient } from 'react-query';
 import React, { useState } from 'react';
 import { getArticles, ArticleTypes } from '../services/api';
 import ItemSection from '../components/Landing/ItemSection';
+import { useLocation } from 'react-router-dom';
 
 interface Data<T> {
     postSize: number;
@@ -13,12 +14,18 @@ interface FetchState {
 }
 const LandingPage = () => {
     const queryClient = useQueryClient();
-    const [fetchState, setFetchState] = useState<FetchState>({ skip: 0, limit: 6 });
-    const { isLoading, error, data } = useQuery<Data<ArticleTypes> | undefined, Error>('posts', getArticles);
+    const {pathname} = useLocation();
+    const params = {
+        category : pathname === '/' ? 'popular' : '',
+    }
+    console.log(params);
+    const { isLoading, error, data } = useQuery<Data<ArticleTypes> | undefined, Error>(pathname === '/' ? 'popular' : 'recnet', () => getArticles(params));
 
     if (isLoading) return <div>로딩 중...</div>;
 
-    return <ItemSection items={data?.posts} />;
+    return <div style={{backgroundColor : '#f8f9fa'}}>
+    <ItemSection items={data?.posts} />
+    </div>
 };
 
 export default LandingPage;

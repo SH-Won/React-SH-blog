@@ -5,10 +5,11 @@ interface FavoriteButtonProps{
     clicked:boolean;
 }
 const DetailInfoContainer = styled.div`
-width:90%;
+
 display:flex;
 flex-direction: column;
-margin:0 auto;
+width:100%;
+
 `
 
 const Time = styled.time`

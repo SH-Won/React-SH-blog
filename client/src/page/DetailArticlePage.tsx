@@ -12,11 +12,12 @@ import DetailInfo from '../components/Detail/DetailInfo';
 const DetailContainer = styled.div`
     display: flex;
     flex-direction: column;
+    padding:1.5rem;
 `;
 
 const DetailArticlePage = () => {
     const { id } = useParams();
-    const { data, isLoading } = useQuery<ArticleTypes | undefined>('article', () => getArticle(id as string));
+    const { data, isLoading } = useQuery<ArticleTypes | undefined>(`${id}`, () => getArticle(id as string));
 
     const stringToHTML = useMemo(() => {
         return data ? <div className={'ql-content'} dangerouslySetInnerHTML={{ __html: data?.data }}></div> : null;
