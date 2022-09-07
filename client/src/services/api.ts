@@ -1,3 +1,4 @@
+import { getItem } from './../utils/storage';
 import axios, { AxiosResponse } from 'axios';
 
 const BASE_URL = `${window.origin}`;
@@ -48,4 +49,48 @@ export const getArticle = async (id : string) => {
 
     }
 
+}
+
+type LoginParams = {
+    email:string;
+    password:string;
+}
+export const loginUser = async (params :LoginParams) => {
+    try{
+        const response : AxiosResponse = await axios.post(BASE_URL + '/api/users/login',params);
+        return response.data ;
+
+    }catch(e){
+
+    }
+}
+export const logOutUser = async () => {
+    try{
+        const response : AxiosResponse = await axios.get(BASE_URL+'/api/users/logout',{
+            withCredentials:true,
+            headers : {
+                authorization: getItem('token'),
+                refreshtoken:getItem('refreshToken'),
+            }
+        })
+        return response.data;
+
+    }catch(e){
+
+    }
+}
+export const auth = async () => {
+    
+    try{
+        const response : AxiosResponse = await axios.get(BASE_URL+'/api/users/auth',{
+            withCredentials : true,
+            headers : {
+                authorization: getItem('token'),
+                refreshtoken:getItem('refreshToken'),
+            }
+        })
+        return response.data;
+    }catch(e){
+
+    }
 }

@@ -6,8 +6,8 @@
         "checkJs": false,
         "jsx": "react",
         "outDir": "./build",
-        "rootDir": ".",
-        "baseUrl": ".",
+        "rootDir": "./",
+        // "baseUrl": ".",
         
         "removeComments": true,
         "noEmit": true,
@@ -17,9 +17,9 @@
         "moduleResolution": "node",
         "esModuleInterop": true
     },
-    "include": [
-       "./src/**/*"
-    ],
+    // "include": [
+    //    "./src/**/*"
+    // ],
     "exclude": [
         "node_modules"
     ]
