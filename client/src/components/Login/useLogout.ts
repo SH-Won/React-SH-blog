@@ -8,7 +8,8 @@ const useLogout = () => {
     const navigate = useNavigate();
     const {mutate,isLoading} = useMutation('userLogout',logOutUser,{
         onSuccess : (data,variables,context) => {
-            queryClient.setQueryData('loginUser',null);
+            // queryClient.setQueryData('loginUser',null);
+            queryClient.removeQueries('loginUser');
              removeItem('token');
              removeItem('refreshToken');
              removeItem('loginSuccess');

@@ -29,7 +29,15 @@ function Auth<P>(Component: ComponentType<P>, isLogin: boolean) {
     return (props: P) => {
         const navigate = useNavigate();
         const { data, isLoading } = useQuery<UserType>('user', auth,{
-            enabled:true,
+            refetchOnWindowFocus:false,
+            refetchOnMount : true,
+            refetchOnReconnect:true,
+            retry:2,
+            onSuccess : data => {
+                const {token,refreshToken} = data;
+                setItem('token',token);
+                setItem('refreshToken',refreshToken);
+            }
         });
         console.log('auth', data, isLoading);
         // if (isLoading) return <div>checking..</div>;
@@ -40,8 +48,8 @@ function Auth<P>(Component: ComponentType<P>, isLogin: boolean) {
             if (!data.user.isAuth) {
                 if (isLogin) navigate('/login');
             } else {
-                setItem('token', data.token);
-                setItem('refreshToken', data.refreshToken);
+                // setItem('token', data.token);
+                // setItem('refreshToken', data.refreshToken);
             }
         }, [isLoading]);
 
@@ -49,18 +57,5 @@ function Auth<P>(Component: ComponentType<P>, isLogin: boolean) {
     };
 }
 
-// if (!data?.user.isAuth) {
-//     console.log('if')
-//     if (isLogin) {
-//         navigate('/login');
-//         return null;
-//     }
-//     else return <Component {...props} />;
-// } else {
-//     console.log('else')
-//     setItem('token', data.token);
-//     setItem('refreshToken', data.refreshToken);
-//     return <Component {...props} user={data.user} />;
-// }
 
 export default Auth;
