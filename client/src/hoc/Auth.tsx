@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { ComponentType } from 'react';
-import { useQuery } from 'react-query';
+
 import { useNavigate } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
+import { userState } from '../recoil/user';
 import { auth } from '../services/api';
 import { setItem } from '../utils/storage';
 
@@ -28,34 +30,29 @@ export interface WithAuthProps {
 function Auth<P>(Component: ComponentType<P>, isLogin: boolean) {
     return (props: P) => {
         const navigate = useNavigate();
-        const { data, isLoading } = useQuery<UserType>('user', auth,{
-            refetchOnWindowFocus:false,
-            refetchOnMount : true,
-            refetchOnReconnect:true,
-            retry:2,
-            onSuccess : data => {
-                const {token,refreshToken} = data;
-                setItem('token',token);
-                setItem('refreshToken',refreshToken);
-            }
-        });
-        console.log('auth', data, isLoading);
-        // if (isLoading) return <div>checking..</div>;
+
+        const setUserData = useSetRecoilState(userState);
 
         useEffect(() => {
-            if (!data) return;
+            (async () => {
+                const userData = await auth();
+                if (!userData.user.isAuth) {
+                    if (isLogin) navigate('/login');
+                } else {
+                    const { token, refreshToken, user } = userData;
+                    setUserData({ ...user });
+                    setItem('token', token);
+                    setItem('refreshToken', refreshToken);
+                }
+            })();
+        }, []);
 
-            if (!data.user.isAuth) {
-                if (isLogin) navigate('/login');
-            } else {
-                // setItem('token', data.token);
-                // setItem('refreshToken', data.refreshToken);
-            }
-        }, [isLoading]);
-
-        return  <Component {...props} user={data?.user} /> 
+        return (
+            <Suspense fallback={<div>user auth...</div>}>
+                <Component {...props} />
+            </Suspense>
+        );
     };
 }
-
 
 export default Auth;

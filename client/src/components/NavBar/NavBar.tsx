@@ -3,6 +3,9 @@ import { RouteLink, StyledButton } from '../../shared/shared.style';
 import styled from 'styled-components';
 import { useQuery } from 'react-query';
 import useLogout from '../Login/useLogout';
+import { RecoilState, useRecoilValue } from 'recoil';
+import { loginState } from '../../recoil/user';
+import { User } from '../../hoc/Auth';
 
 const Nav = styled.nav`
     display: flex;
@@ -27,10 +30,10 @@ const ListItem = styled.li`
 `;
 
 const UserStateLogin = () => {
-    const {mutate : handleLogOut}  = useLogout()
+    const { handleLogout } = useLogout();
     return (
         <NavList>
-            <StyledButton onClick={ () => handleLogOut()}>
+            <StyledButton onClick={handleLogout}>
                 <RouteLink to="/logout" color="inherit">
                     로그아웃
                 </RouteLink>
@@ -56,19 +59,15 @@ const UserStateNotLogin = () => {
 };
 
 type LoginUser = {
-    loginSuccess : boolean;
-    token : string;
-    refreshToken : string;
-}
+    loginSuccess: boolean;
+    token: string;
+    refreshToken: string;
+};
 
 const NavBar = () => {
-    // const queryClient = useQueryClient();
-    // const user = queryClient.getQueryData('user');
-    // console.log(user);
-    const { data }  = useQuery<LoginUser|null>('loginUser', { initialData: null, staleTime: Infinity });
-    // console.log(queryClient)
-    // console.log(user);
-    console.log(data);
+    const isLogin = useRecoilValue(loginState);
+    console.log(isLogin);
+
     return (
         <Nav>
             <NavList>
@@ -78,7 +77,7 @@ const NavBar = () => {
                     </RouteLink>
                 </ListItem>
             </NavList>
-            {data?.loginSuccess ? <UserStateLogin /> : <UserStateNotLogin />}
+            {isLogin ? <UserStateLogin /> : <UserStateNotLogin />}
         </Nav>
     );
 };

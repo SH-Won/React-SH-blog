@@ -5,6 +5,7 @@ import NavBar from './components/NavBar/NavBar';
 import LandingTab from './components/LandingTab/LandingTab';
 import Auth from './hoc/Auth';
 import EditPage from './page/EditPage';
+import { RecoilRoot } from 'recoil';
 
 const queryClient = new QueryClient();
 
@@ -16,17 +17,19 @@ const AuthEditPage = Auth(EditPage, true);
 const App = () => {
     return (
         <>
-            <QueryClientProvider client={queryClient}>
-                <NavBar />
-                <Suspense fallback={<div>loading...</div>}>
-                    <Routes>
-                        <Route path="/*" element={<LandingTab />} />
-                        <Route path="/detail/:id" element={<DetailArticlePage />} />
-                        <Route path="/edit" element={<AuthEditPage />} />
-                        <Route path="/login" element={<LoginPage />} />
-                    </Routes>
-                </Suspense>
-            </QueryClientProvider>
+            <RecoilRoot>
+                <QueryClientProvider client={queryClient}>
+                    <NavBar />
+                    <Suspense fallback={<div>loading...</div>}>
+                        <Routes>
+                            <Route path="/*" element={<LandingTab />} />
+                            <Route path="/detail/:id" element={<DetailArticlePage />} />
+                            <Route path="/edit" element={<AuthEditPage />} />
+                            <Route path="/login" element={<LoginPage />} />
+                        </Routes>
+                    </Suspense>
+                </QueryClientProvider>
+            </RecoilRoot>
         </>
     );
 };
