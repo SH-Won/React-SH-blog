@@ -1,7 +1,9 @@
 import React, { LegacyRef, MutableRefObject, useEffect, useRef, useState } from 'react'
-import ReactQuill from 'react-quill/lib/index';
+import ReactQuill, { ReactQuillProps, UnprivilegedEditor } from 'react-quill/lib/index';
 import 'react-quill/dist/quill.snow.css';
 import { getItem } from '../../utils/storage';
+import { StyledButton } from '../../shared/shared.style';
+import styled from 'styled-components';
 
 const modules = {
     toolbar : [
@@ -41,7 +43,8 @@ ImageBlot.tagName = 'figure';
 ReactQuill.Quill.register(ImageBlot);
 
 
-const uploadMulter = (editor : React.RefObject<ReactQuill>) => {
+const uploadMulter = (ReactQuill : ReactQuill) => {
+    const editor = ReactQuill.editor ;
     const input  = document.createElement('input');
     input.setAttribute('type', 'file');
     input.setAttribute('multiple', '');
@@ -56,11 +59,12 @@ const uploadMulter = (editor : React.RefObject<ReactQuill>) => {
         const formData = new FormData();
         const token = getItem('token');
         const refreshToken = getItem('refreshToken');
-        for (let i = 0; i < input.files.length; i++) {
-            formData.append('file', input.files[i]);
+        const files = input.files as FileList;
+        for (let i = 0; i < files.length; i++) {
+            formData.append('file', files[i]);
         }
 
-        const res = await fetch(`${ENDPOINT}/api/posts/uploadfiles`, {
+        const res = await fetch(`${window.origin}/api/posts/uploadfiles`, {
             method: 'POST',
             headers: {
                 // 'Content-Type':'multipart/form-data'
@@ -73,15 +77,17 @@ const uploadMulter = (editor : React.RefObject<ReactQuill>) => {
         });
         if (res.ok) {
             const { data } = await res.json();
-            const range = editor.getSelection();
-            data.forEach(({ url }) => {
+            const range = editor?.getSelection()  as ReactQuill.Range ;
+            
+            let index  = range?.index as number;
+            data.forEach(({ url } : {url : string}) => {
                 const value = {
-                    url: `${ENDPOINT}${url}`,
+                    url: `${window.origin}${url}`,
                     id: '',
                 };
-                editor.insertEmbed(range.index++, 'image', value);
+                editor?.insertEmbed(index++ ,'image', value);
             });
-            editor.setSelection(++range.index, 0);
+            editor?.setSelection(++index, 0);
         }
         editorRoot.removeChild(input);
     });
@@ -89,18 +95,32 @@ const uploadMulter = (editor : React.RefObject<ReactQuill>) => {
     
 }
 
+const EditorContainer = styled.div`
+display:flex;
+flex-direction: column;
+`
 const QuillEditor = () => {
     const [value,setValue] = useState('');
-    const quillRef = useRef<ReactQuill | null>(null);
+    const quillRef = useRef<ReactQuill | null>() as MutableRefObject<ReactQuill> ;
 
     useEffect(() => {
-
+        const {current} = quillRef;
+        current.editor?.getModule('toolbar').addHandler('image', () =>{
+            uploadMulter(current);
+        })
     },[])
 
+    const showContent = () => {
+        const {current} = quillRef;
+        console.log(current.editor?.getContents());
+    }
     
 
   return (
+    <EditorContainer>
     <ReactQuill ref={quillRef} theme='snow' value={value} onChange={setValue} modules={modules} formats={formats}/>
+    <StyledButton onClick={showContent}>Show Content</StyledButton>
+    </EditorContainer>
   )
 }
 
