@@ -1,7 +1,7 @@
 import { getItem, setItem, removeItem } from './../utils/storage';
 import { auth } from './../services/api';
 import { selector, atom } from 'recoil';
-
+import { ArticleTypes } from './../services/api';
 export const loginState = atom({
     key: 'loginState',
     default: getItem('loginSuccess'),
@@ -32,9 +32,8 @@ export const loginStateSelector = selector({
 export const userState = atom({
     key: 'userState',
     default: {
-        user: {
-            isAuth: false,
-        },
+        isAuth : false,
+        _id : '',
     },
 });
 
@@ -51,3 +50,11 @@ export const userStateSelector = selector({
         setItem('refreshToken', refreshtoken);
     },
 });
+
+export const userModifyArticle = atom({
+    key:'userModifyArticle',
+    default:{
+        modify:false,
+        article : {},
+    }
+})

@@ -14,6 +14,7 @@ const DetailArticlePage = lazy(() => import('./page/DetailArticlePage'));
 // const EditPage = lazy(() => import('./page/EditPage'));
 const LoginPage = lazy(() => import('./page/LoginPage'));
 const AuthEditPage = Auth(EditPage, true);
+const AuthLandingTab = Auth(LandingTab,false);
 const App = () => {
     return (
         <>
@@ -22,7 +23,7 @@ const App = () => {
                     <NavBar />
                     <Suspense fallback={<div>loading...</div>}>
                         <Routes>
-                            <Route path="/*" element={<LandingTab />} />
+                            <Route path="/*" element={<AuthLandingTab/>} />
                             <Route path="/detail/:id" element={<DetailArticlePage />} />
                             <Route path="/edit" element={<AuthEditPage />} />
                             <Route path="/login" element={<LoginPage />} />

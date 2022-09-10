@@ -3,6 +3,9 @@ import axios, { AxiosResponse } from 'axios';
 
 const BASE_URL = `${window.origin}`;
 
+interface Writer {
+    _id : string;
+}
 export interface Post {
     category: number;
     description: string;
@@ -20,11 +23,15 @@ export interface ArticleTypes {
     thumbnail: string;
     title: string;
     updatedAt: string;
-    writer: string;
+    writer: Writer;
     _id: string;
 }
 export interface GetArticleParams{
     category?:string;
+}
+interface UploadData {
+    userId : string;
+    paths : string[];
 }
 export const getPosts = async () => {
     try {
@@ -45,6 +52,15 @@ export const getArticle = async (id : string) => {
         const response : AxiosResponse = await axios.get(BASE_URL + `/api/posts/detailArticle?articleId=${id}`)
         return response.data[0] as ArticleTypes;
 
+    }catch(e){
+
+    }
+
+}
+export const uploadCloudinary = async (data : UploadData) => {
+    try{
+        const response : AxiosResponse = await axios.post(BASE_URL +'/api/posts/upload',data);
+        return response.data;
     }catch(e){
 
     }

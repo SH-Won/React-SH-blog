@@ -14,18 +14,7 @@ const useLogin = () => {
     const [isValidEmail, setIsValidEmail] = useState<boolean | null>(null);
     const [isValidPassword, setIsValidPassword] = useState<boolean | null>(null);
 
-    // const { mutate } = useMutation(['user','userLogin'],loginUser,{
-    //   onSuccess : (data,variables,context) => {
-    //     queryClient.setQueryData('loginUser',data);
-    //     setItem('token',data.token);
-    //     setItem('refreshToken',data.refreshToken);
-    //     setItem('loginSuccess',data.loginSuccess);
-    //     navigate('/');
-    //   },
-
-    // });
     const setLoginState = useSetRecoilState(loginState);
-    // const loginSelector = useRecoilValue(loginUserSelector);
 
     const onChangeEmail = (e: React.FormEvent<HTMLInputElement>) => {
         setEmail(e.currentTarget.value);

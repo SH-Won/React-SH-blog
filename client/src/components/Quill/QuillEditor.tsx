@@ -1,28 +1,27 @@
-import React, { LegacyRef, MutableRefObject, useEffect, useRef, useState } from 'react'
-import ReactQuill, { ReactQuillProps, UnprivilegedEditor } from 'react-quill/lib/index';
+import React, {  MutableRefObject, useEffect, useRef, useState } from 'react';
+import ReactQuill from 'react-quill/lib/index';
 import 'react-quill/dist/quill.snow.css';
 import { getItem } from '../../utils/storage';
 import { StyledButton } from '../../shared/shared.style';
 import styled from 'styled-components';
+import useQuillUpload from './useQuillUpload';
+import { useRecoilValue } from 'recoil';
+import { userModifyArticle, userState } from '../../recoil/user';
+import { ArticleTypes } from '../../services/api';
 
 const modules = {
-    toolbar : [
+    toolbar: [
         [{ header: [1, 2, false] }],
-                ['bold', 'italic', 'underline', 'blockquote'],
-                [{ list: 'ordered' }, { list: 'bullet' }],
-                ['image', 'code-block'],
-    ]
-}
-const formats = [
-    'header',
-    'bold','italic','underline','blockquoto',
-    'list','bullet',
-    'image','code-block'
-]
+        ['bold', 'italic', 'underline', 'blockquote'],
+        [{ list: 'ordered' }, { list: 'bullet' }],
+        ['image', 'code-block'],
+    ],
+};
+const formats = ['header', 'bold', 'italic', 'underline', 'blockquoto', 'list', 'bullet', 'image', 'code-block'];
 
 const BlockEmbed = ReactQuill.Quill.import('blots/block/embed');
 class ImageBlot extends BlockEmbed {
-    static create(value : {url:string, id : string}) {
+    static create(value: { url: string; id: string }) {
         let node = super.create();
         node.classList.add('image');
         const img = document.createElement('img');
@@ -31,7 +30,7 @@ class ImageBlot extends BlockEmbed {
         node.appendChild(img);
         return node;
     }
-    static value(node : any) {
+    static value(node: any) {
         return {
             id: node.firstChild.getAttribute('data-id'),
             url: node.firstChild.getAttribute('src'),
@@ -42,10 +41,9 @@ ImageBlot.blotName = 'image';
 ImageBlot.tagName = 'figure';
 ReactQuill.Quill.register(ImageBlot);
 
-
-const uploadMulter = (ReactQuill : ReactQuill) => {
-    const editor = ReactQuill.editor ;
-    const input  = document.createElement('input');
+const uploadMulter = (ReactQuill: ReactQuill) => {
+    const editor = ReactQuill.editor;
+    const input = document.createElement('input');
     input.setAttribute('type', 'file');
     input.setAttribute('multiple', '');
     input.setAttribute('accept', 'image/*');
@@ -77,51 +75,68 @@ const uploadMulter = (ReactQuill : ReactQuill) => {
         });
         if (res.ok) {
             const { data } = await res.json();
-            const range = editor?.getSelection()  as ReactQuill.Range ;
-            
-            let index  = range?.index as number;
-            data.forEach(({ url } : {url : string}) => {
+            const range = editor?.getSelection() as ReactQuill.Range;
+
+            let index = range?.index as number;
+            data.forEach(({ url }: { url: string }) => {
                 const value = {
                     url: `${window.origin}${url}`,
                     id: '',
                 };
-                editor?.insertEmbed(index++ ,'image', value);
+                editor?.insertEmbed(index++, 'image', value);
             });
             editor?.setSelection(++index, 0);
         }
         editorRoot.removeChild(input);
     });
     input.click();
-    
-}
+};
 
 const EditorContainer = styled.div`
-display:flex;
-flex-direction: column;
-`
-const QuillEditor = () => {
-    const [value,setValue] = useState('');
-    const quillRef = useRef<ReactQuill | null>() as MutableRefObject<ReactQuill> ;
+    display: flex;
+    flex-direction: column;
+`;
 
-    useEffect(() => {
-        const {current} = quillRef;
-        current.editor?.getModule('toolbar').addHandler('image', () =>{
-            uploadMulter(current);
-        })
-    },[])
-
-    const showContent = () => {
-        const {current} = quillRef;
-        console.log(current.editor?.getContents());
-    }
-    
-
-  return (
-    <EditorContainer>
-    <ReactQuill ref={quillRef} theme='snow' value={value} onChange={setValue} modules={modules} formats={formats}/>
-    <StyledButton onClick={showContent}>Show Content</StyledButton>
-    </EditorContainer>
-  )
+type ModifyType = {
+    modify: boolean;
+    article : ArticleTypes | null;
 }
 
-export default QuillEditor
+const QuillEditor = ({modify,article}  : ModifyType) =>   {
+    // const modify = useRecoilValue(userModifyArticle);
+    const userData = useRecoilValue(userState);
+    const [value, setValue] = useState('');
+    const quillRef = useRef<ReactQuill | null>() as MutableRefObject<ReactQuill>;
+    const {show} = useQuillUpload(quillRef)
+    console.log(userData,modify);
+    useEffect(() => {
+        const { current } = quillRef;
+        current.editor?.getModule('toolbar').addHandler('image', () => {
+            uploadMulter(current);
+        });
+
+        if(article?.data){
+        const delta = current.editor?.clipboard.convert(article?.data);
+        current.editor?.setContents(delta!);
+        }
+        
+    }, []);
+
+
+    return (
+        <EditorContainer>
+            <ReactQuill
+                ref={quillRef}
+                theme="snow"
+                value={value}
+                onChange={setValue}
+                modules={modules}
+                formats={formats}
+            />
+            <StyledButton onClick={show}>Show Content</StyledButton>
+            <StyledButton>Upload Item</StyledButton>
+        </EditorContainer>
+    );
+};
+
+export default QuillEditor;
