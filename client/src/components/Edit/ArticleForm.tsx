@@ -7,7 +7,8 @@ const Container = styled.div`
 `;
 const TitleInput = styled.input`
     width: 70%;
-    font-size: 1.4rem;
+    font-size: 1.1rem;
+    padding:.3rem;
 `;
 const LanguageSelect = styled.select``;
 const Option = styled.option`

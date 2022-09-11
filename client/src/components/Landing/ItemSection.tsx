@@ -2,8 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 
 import * as Common from '../../shared/shared.style';
-import { ArticleTypes, Post } from 'src/services/api';
+
 import { Link } from 'react-router-dom';
+import { ArticleTypes } from '../../services/api';
 
 interface ArticleProps {
     flex?: string;

@@ -71,3 +71,26 @@ export const userModifyArticle = atom<{ modify: boolean; article: ArticleTypes }
         },
     },
 });
+export const userModifySelector = selector({
+    key: 'userModifySelector',
+    get: ({ get }) => {},
+    set: ({ get, set }) => {
+        set(userModifyArticle, {
+            modify: false,
+            article: {
+                category: 0,
+                createdAt: '',
+                data: '',
+                favoriteCount: 0,
+                imageIds: [],
+                thumbnail: '',
+                title: '',
+                updatedAt: '',
+                writer: {
+                    _id: '',
+                },
+                _id: '',
+            },
+        });
+    },
+});
