@@ -1,7 +1,7 @@
 import { getItem, setItem, removeItem } from './../utils/storage';
-import { auth } from './../services/api';
+import { auth, ArticleTypes } from './../services/api';
 import { selector, atom } from 'recoil';
-import { ArticleTypes } from './../services/api';
+
 export const loginState = atom({
     key: 'loginState',
     default: getItem('loginSuccess'),
@@ -32,8 +32,8 @@ export const loginStateSelector = selector({
 export const userState = atom({
     key: 'userState',
     default: {
-        isAuth : false,
-        _id : '',
+        isAuth: false,
+        _id: '',
     },
 });
 
@@ -51,10 +51,23 @@ export const userStateSelector = selector({
     },
 });
 
-export const userModifyArticle = atom({
-    key:'userModifyArticle',
-    default:{
-        modify:false,
-        article : {},
-    }
-})
+export const userModifyArticle = atom<{ modify: boolean; article: ArticleTypes }>({
+    key: 'userModifyArticle',
+    default: {
+        modify: false,
+        article: {
+            category: 0,
+            createdAt: '',
+            data: '',
+            favoriteCount: 0,
+            imageIds: [],
+            thumbnail: '',
+            title: '',
+            updatedAt: '',
+            writer: {
+                _id: '',
+            },
+            _id: '',
+        },
+    },
+});

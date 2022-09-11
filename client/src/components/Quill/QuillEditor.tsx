@@ -97,20 +97,21 @@ const EditorContainer = styled.div`
     flex-direction: column;
 `;
 
-type ModifyType = {
-    modify: boolean;
-    article : ArticleTypes | null;
+type EditorType = {
+
+    article : ArticleTypes;
+    editorRef : MutableRefObject<ReactQuill>
 }
 
-const QuillEditor = ({modify,article}  : ModifyType) =>   {
+const QuillEditor :React.FC<EditorType>= ({editorRef,article}) =>   {
     // const modify = useRecoilValue(userModifyArticle);
     const userData = useRecoilValue(userState);
     const [value, setValue] = useState('');
-    const quillRef = useRef<ReactQuill | null>() as MutableRefObject<ReactQuill>;
-    const {show} = useQuillUpload(quillRef)
-    console.log(userData,modify);
+    // const quillRef = useRef<ReactQuill | null>() as MutableRefObject<ReactQuill>;
+    // const {show} = useQuillUpload(quillRef)
+
     useEffect(() => {
-        const { current } = quillRef;
+        const { current } = editorRef;
         current.editor?.getModule('toolbar').addHandler('image', () => {
             uploadMulter(current);
         });
@@ -126,15 +127,13 @@ const QuillEditor = ({modify,article}  : ModifyType) =>   {
     return (
         <EditorContainer>
             <ReactQuill
-                ref={quillRef}
+                ref={editorRef}
                 theme="snow"
                 value={value}
                 onChange={setValue}
                 modules={modules}
                 formats={formats}
             />
-            <StyledButton onClick={show}>Show Content</StyledButton>
-            <StyledButton>Upload Item</StyledButton>
         </EditorContainer>
     );
 };
