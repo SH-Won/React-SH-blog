@@ -19,22 +19,25 @@ const TabItem = styled.li`
     padding: 0.5rem;
     text-align: center;
 `;
-const TabUnderLine = styled.div<{pathname:string}>`
+const TabUnderLine = styled.div<{ pathname: string }>`
     width: 50%;
     height: 4px;
     border-radius: 50px;
     background-color: #d5f7e7;
     position: absolute;
     bottom: 0;
-    ${props => props.pathname === '/' ? css`
-       left : 0%;
-       transform : translate3d(0%,0,0);
-       transition : transform 1s;
-    ` : css`
-       left:0%;
-       transform : translate3d(100%,0,0);
-       transition : transform 1s;
-    `}
+    ${props =>
+        props.pathname === '/'
+            ? css`
+                  left: 0%;
+                  transform: translate3d(0%, 0, 0);
+                  transition: transform 1s;
+              `
+            : css`
+                  left: 0%;
+                  transform: translate3d(100%, 0, 0);
+                  transition: transform 1s;
+              `}
 `;
 
 const LandingTab = () => {
@@ -45,11 +48,10 @@ const LandingTab = () => {
         const { current } = tabRef;
         const listItemCount = current.childNodes.length - 1;
     }, []);
-    
 
     return (
         <>
-            <Tab ref={tabRef} >
+            <Tab ref={tabRef}>
                 <TabItem>
                     <RouteLink to={'/'} color={'black'}>
                         인기
@@ -60,7 +62,7 @@ const LandingTab = () => {
                         최신
                     </RouteLink>
                 </TabItem>
-                <TabUnderLine pathname={pathname}/>
+                <TabUnderLine pathname={pathname} />
             </Tab>
             <Routes>
                 <Route path="/" element={<LandingPage />} />

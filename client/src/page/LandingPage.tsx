@@ -5,6 +5,7 @@ import ItemSection from '../components/Landing/ItemSection';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { RouteLink, StyledButton } from '../shared/shared.style';
+import Loading from '../components/Loading/Loading';
 
 interface Data<T> {
     postSize: number;
@@ -24,7 +25,6 @@ const EditButton = styled(StyledButton)`
     margin: 1rem;
 `;
 const LandingPage = () => {
-
     const { pathname } = useLocation();
     const params = {
         category: pathname === '/' ? 'popular' : '',
@@ -34,10 +34,11 @@ const LandingPage = () => {
         () => getArticles(params),
     );
 
-    if (isLoading) return <div>로딩 중...</div>;
+    if (isLoading) return <Loading/>;
 
     return (
         <LandingContainer>
+            <Loading/>
             <EditButton>
                 <RouteLink to="/edit" color={'inherit'}>
                     글 쓰기

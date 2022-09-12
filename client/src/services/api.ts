@@ -72,8 +72,8 @@ export interface UploadArticleData {
     removeIds: string[];
 }
 interface DeleteArticleData {
-  _id: string;
-  imageIds : string[];
+    _id: string;
+    imageIds: string[];
 }
 export interface UpdateArticleData extends UploadArticleData {
     _id: string;
@@ -90,10 +90,9 @@ export const updateArticle = async (data: UploadArticleData) => {
         return response.data;
     } catch (e) {}
 };
-export const deleteArticle = async (data:DeleteArticleData) => {
-
+export const deleteArticle = async (data: DeleteArticleData) => {
     try {
-        const response: AxiosResponse = await axios.post(BASE_URL + '/api/posts/deleteArticle',data );
+        const response: AxiosResponse = await axios.post(BASE_URL + '/api/posts/deleteArticle', data);
         return response.data;
     } catch (e) {}
 };

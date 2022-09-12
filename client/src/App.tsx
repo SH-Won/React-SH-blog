@@ -6,6 +6,7 @@ import LandingTab from './components/LandingTab/LandingTab';
 import Auth from './hoc/Auth';
 import EditPage from './page/EditPage';
 import { RecoilRoot } from 'recoil';
+import Loading from './components/Loading/Loading';
 
 const queryClient = new QueryClient();
 
@@ -21,7 +22,7 @@ const App = () => {
             <RecoilRoot>
                 <QueryClientProvider client={queryClient}>
                     <NavBar />
-                    <Suspense fallback={<div>loading...</div>}>
+                    <Suspense fallback={<Loading/>}>
                         <Routes>
                             <Route path="/*" element={<AuthLandingTab />} />
                             <Route path="/detail/:id" element={<DetailArticlePage />} />

@@ -8,7 +8,7 @@ const Container = styled.div`
 const TitleInput = styled.input`
     width: 70%;
     font-size: 1.1rem;
-    padding:.3rem;
+    padding: 0.3rem;
 `;
 const LanguageSelect = styled.select``;
 const Option = styled.option`
@@ -16,18 +16,18 @@ const Option = styled.option`
 `;
 type FormType = {
     title: string;
-    selectedLanguage : number
+    selectedLanguage: number;
     handleChangeTitle: (e: React.ChangeEvent<HTMLInputElement>) => void;
     handleSelectLanguage: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 };
-const ArticleForm = ({ title, selectedLanguage ,handleChangeTitle, handleSelectLanguage }: FormType) => {
+const ArticleForm = ({ title, selectedLanguage, handleChangeTitle, handleSelectLanguage }: FormType) => {
     return (
         <Container>
             <TitleInput type="text" value={title} onChange={handleChangeTitle} />
             <LanguageSelect onChange={handleSelectLanguage} value={selectedLanguage}>
                 <Option defaultValue={0}>선택</Option>
                 {languages.map(lang => (
-                    <Option key={lang.name} value={lang._id} >
+                    <Option key={lang.name} value={lang._id}>
                         {lang.name}
                     </Option>
                 ))}

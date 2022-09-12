@@ -33,6 +33,6 @@ export const languages = [
         name: '이슈',
     },
 ];
-export const getImageURL = (id:number)=> {
+export const getImageURL = (id: number) => {
     return imageURL[id];
 };

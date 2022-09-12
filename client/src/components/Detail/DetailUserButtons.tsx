@@ -20,7 +20,7 @@ const DetailUserButton = ({ data }: { data: ArticleTypes }) => {
     const userData = useRecoilValue(userState);
     const setUserModifyArticle = useSetRecoilState(userModifyArticle);
     const isMatch = userData._id === data.writer._id;
-    
+
     const handleEditArticle = () => {
         setUserModifyArticle({
             article: data,
@@ -29,13 +29,15 @@ const DetailUserButton = ({ data }: { data: ArticleTypes }) => {
         navigate('/edit');
     };
     const handleDelete = async () => {
+        const confirm = window.confirm('정말 삭제 하시겠어요?');
+        if(!confirm) return ; 
         const params = {
-            _id : data._id,
-            imageIds : data.imageIds,
-        }
+            _id: data._id,
+            imageIds: data.imageIds,
+        };
         const response = await deleteArticle(params);
-        console.log(response);
-        if(response.success){
+
+        if (response.success) {
             navigate('/');
         }
     };

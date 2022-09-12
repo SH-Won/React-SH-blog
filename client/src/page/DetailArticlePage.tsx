@@ -8,6 +8,7 @@ import '../highlight.css';
 import DetailInfo from '../components/Detail/DetailInfo';
 import styled from 'styled-components';
 import DetailUserButton from '../components/Detail/DetailUserButtons';
+import Loading from '../components/Loading/Loading';
 
 const DetailContainer = styled.div`
     display: flex;
@@ -22,6 +23,7 @@ const DetailArticlePage = () => {
     const stringToHTML = useMemo(() => {
         return data ? <div className={'ql-content'} dangerouslySetInnerHTML={{ __html: data?.data }}></div> : null;
     }, [isLoading]);
+    
     const calcTime = useMemo(() => {
         if (!data) return;
 
@@ -29,7 +31,7 @@ const DetailArticlePage = () => {
         return `${date[0]}년 ${date[1]}월 ${date[2]}일 ${date[3]}`;
     }, [isLoading]);
 
-    if (isLoading) return <div>article loading...</div>;
+    if (isLoading) return <Loading/>
 
     return !isLoading ? (
         <DetailContainer>

@@ -23,7 +23,7 @@ const Article = styled.article<ArticleProps>`
     flex: ${props => props.flex};
     width: calc((100% - (6 * 1rem)) / 3);
     margin: 1rem;
-    height:100%;
+    height: 100%;
     border-radius: 6px;
     background-color: #fff;
     box-shadow: rgb(0 0 0 / 7%) 0px 4px 16px 0px;
@@ -36,46 +36,43 @@ const Article = styled.article<ArticleProps>`
     @media screen and (max-width: 501px) {
         width: calc((100% - (2 * 1rem)));
     }
-    
-    &:hover{
+
+    &:hover {
         cursor: pointer;
-    box-shadow: rgb(0 0 0 / 20%) 0px 4px 16px 0px;
+        box-shadow: rgb(0 0 0 / 20%) 0px 4px 16px 0px;
     }
 `;
 const RouterLink = styled(Link)`
-margin:0;
-padding:0;
-text-decoration: none;
-width:100%;
-height:100%;
-color:black;
-
-`
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    width: 100%;
+    height: 100%;
+    color: black;
+`;
 const Title = styled.h3`
-   overflow:hidden;
-   text-overflow: ellipsis;
-   white-space: nowrap;
-   /* word-wrap : break-word; */
-   width:100%;
-   text-align: center;
-   padding:1.2rem;
-   font-size:1.2rem;
-   margin:0;
-   box-sizing: border-box;
-`
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    /* word-wrap : break-word; */
+    width: 100%;
+    text-align: center;
+    padding: 1.2rem;
+    font-size: 1.2rem;
+    margin: 0;
+    box-sizing: border-box;
+`;
 
 const Item = ({ item }: { item: ArticleTypes }) => {
     return (
-        
         <Article>
             <RouterLink to={`/detail/${item._id}`}>
-            <Common.Figure ratio={13 / 16}>
-                <Common.Image src={item.thumbnail} alt={item.title} />
-            </Common.Figure>
-            <Title style={{}}>{item.title}</Title>
+                <Common.Figure ratio={13 / 16}>
+                    <Common.Image src={item.thumbnail} alt={item.title} />
+                </Common.Figure>
+                <Title style={{}}>{item.title}</Title>
             </RouterLink>
         </Article>
-        
     );
 };
 

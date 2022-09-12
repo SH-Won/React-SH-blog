@@ -17,6 +17,14 @@ const Container = styled.div`
     width: 95%;
     margin: 0 auto;
 `;
+const ButtonWrapper = styled.div`
+    width:30%;
+    max-width:300px;
+    justify-content: space-around;
+    display:flex;
+    align-self: end;
+    
+`
 type ModifyType = {
     modify: boolean;
     article: ArticleTypes;
@@ -24,11 +32,11 @@ type ModifyType = {
 
 const EditPage: React.FC = (): React.ReactElement => {
     const userData = useRecoilValue(userState);
-    const [{ article, modify },setUserModifyArticle] = useRecoilState(userModifyArticle);
+    const [{ article, modify }, setUserModifyArticle] = useRecoilState(userModifyArticle);
     const resetUserModifyArticle = useResetRecoilState(userModifySelector);
     const articleInfo = useArticleInfo(article.title, article.category);
     const editorRef = useRef<ReactQuill | null>() as MutableRefObject<ReactQuill>;
-    
+
     const uploadParams = {
         editor: editorRef,
         modify,
@@ -38,40 +46,25 @@ const EditPage: React.FC = (): React.ReactElement => {
         article,
     };
     useEffect(() => {
-      
         return () => {
-            // setUserModifyArticle({
-            //     modify:false,
-            //     article: {
-            //         category: 0,
-            //         createdAt: '',
-            //         data: '',
-            //         favoriteCount: 0,
-            //         imageIds: [],
-            //         thumbnail: '',
-            //         title: '',
-            //         updatedAt: '',
-            //         writer: {
-            //             _id: '',
-            //         },
-            //         _id: '',
-            //     },
-            // })
             resetUserModifyArticle();
-        }
-    },[])
-    const { handleUpload } = useQuillUpload(uploadParams);
+        };
+    }, []);
+
+    const { handleUpload,handleCancle } = useQuillUpload(uploadParams);
     const editor = useMemo(() => {
-         return <QuillEditor editorRef={editorRef} article={article} />
-    },[])
+        return <QuillEditor editorRef={editorRef} article={article} />;
+    }, []);
 
     return (
         <Container>
             <ArticleForm {...articleInfo} />
             {/* <QuillEditor editorRef={editorRef} article={article} /> */}
             {editor}
-            <StyledButton onClick={handleUpload}>Upload Item</StyledButton>
-            <StyledButton>cancle</StyledButton>
+            <ButtonWrapper>
+            <StyledButton onClick={handleUpload}>{modify ? '수정' : '완료'}</StyledButton>
+            <StyledButton onClick={handleCancle}>취소</StyledButton>
+            </ButtonWrapper>
         </Container>
     );
 };

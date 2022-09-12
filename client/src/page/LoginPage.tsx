@@ -27,8 +27,6 @@ const LoginPage = () => {
     const { email, password, onChangeEmail, onChangePassword, onSubmit } = useLogin();
     // const loginFormProps = useLogin();
 
-    
-
     return (
         <Container>
             <LoginForm

@@ -1,4 +1,4 @@
-import React, {  MutableRefObject, useEffect, useRef, useState } from 'react';
+import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
 import ReactQuill from 'react-quill/lib/index';
 import 'react-quill/dist/quill.snow.css';
 import { getItem } from '../../utils/storage';
@@ -98,12 +98,11 @@ const EditorContainer = styled.div`
 `;
 
 type EditorType = {
+    article: ArticleTypes;
+    editorRef: MutableRefObject<ReactQuill>;
+};
 
-    article : ArticleTypes;
-    editorRef : MutableRefObject<ReactQuill>
-}
-
-const QuillEditor :React.FC<EditorType>= ({editorRef,article}) =>   {
+const QuillEditor: React.FC<EditorType> = ({ editorRef, article }) => {
     console.log('editor');
     useEffect(() => {
         const { current } = editorRef;
@@ -111,22 +110,15 @@ const QuillEditor :React.FC<EditorType>= ({editorRef,article}) =>   {
             uploadMulter(current);
         });
 
-        if(article?.data){
-        const delta = current.editor?.clipboard.convert(article?.data);
-        current.editor?.setContents(delta!);
+        if (article?.data) {
+            const delta = current.editor?.clipboard.convert(article?.data);
+            current.editor?.setContents(delta!);
         }
-        
     }, []);
-
 
     return (
         <EditorContainer>
-            <ReactQuill
-                ref={editorRef}
-                theme="snow"
-                modules={modules}
-                formats={formats}
-            />
+            <ReactQuill ref={editorRef} theme="snow" modules={modules} formats={formats} />
         </EditorContainer>
     );
 };

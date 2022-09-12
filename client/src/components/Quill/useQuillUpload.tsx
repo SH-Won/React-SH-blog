@@ -1,9 +1,15 @@
 import { MutableRefObject } from 'react';
 import ReactQuill from 'react-quill';
 import { useNavigate } from 'react-router-dom';
-import { ArticleTypes, deleteArticle, updateArticle, uploadArticle, UploadArticleData, uploadCloudinary } from '../../services/api';
+import {
+    ArticleTypes,
+    updateArticle,
+    uploadArticle,
+    UploadArticleData,
+    uploadCloudinary,
+} from '../../services/api';
 import { getImageURL } from '../../utils/languages';
-// React.Ref<ReactQuill | null>
+
 interface UploadProps {
     editor: MutableRefObject<ReactQuill>;
     modify: boolean;
@@ -16,9 +22,7 @@ const useQuillUpload = ({ editor, modify, title, selectedLanguage, userId, artic
     const navigate = useNavigate();
 
     const handleUpload = async () => {
-
         const { current } = editor as MutableRefObject<ReactQuill>;
-
 
         const imgElements = current.editor?.root.querySelectorAll('.image > img') as NodeListOf<HTMLImageElement>;
         const addImgElements: HTMLImageElement[] = [];
@@ -51,7 +55,7 @@ const useQuillUpload = ({ editor, modify, title, selectedLanguage, userId, artic
                     console.log(response);
                     addImgElements.forEach((element, index) => {
                         const { url, id } = response.data[index];
-                        console.log(url,id);
+                        console.log(url, id);
                         const parentElement = element.parentElement as HTMLElement;
                         parentElement.className = 'image';
                         element.src = url;
@@ -81,12 +85,18 @@ const useQuillUpload = ({ editor, modify, title, selectedLanguage, userId, artic
                 return uploadArticle(data);
             })
             .then(async response => {
-                // navigate('/recent');
+                navigate('/recent');
             });
     };
+    const handleCancle = () => {
+        const confirm = window.confirm('작성하신 글이 모두 사라집니다 뒤로 가시겠어요?');
+        if(confirm) navigate('/');
+        
+    }
 
     return {
         handleUpload,
+        handleCancle,
     };
 };
 
