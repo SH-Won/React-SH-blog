@@ -131,3 +131,12 @@ export const auth = async () => {
         return response.data;
     } catch (e) {}
 };
+
+export const updateFavorite = async (data ={}) => {
+    try{
+        const response : AxiosResponse = await axios.post(BASE_URL + '/api/users/favorite',data);
+        return response.data;
+    }catch(e){
+        
+    }
+}

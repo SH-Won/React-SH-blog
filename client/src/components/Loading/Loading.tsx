@@ -19,6 +19,7 @@ width: 50px;
     display: inline-block;
     position: relative;
     vertical-align: middle;
+    animation: 1s infinite ease-in-out;
     &:before,&:after {
         animation: 1s infinite ease-in-out;
     }
@@ -42,7 +43,7 @@ animation : ${anim1} 1.5s infinite linear;
     top:50%;
     left:50%;
     background-color: rgba(30,30,30,0.7);
-    animation-name: ${anim1};
+    animation-name: ${anim2};
 }
 &:after{
     animation-direction: reverse;

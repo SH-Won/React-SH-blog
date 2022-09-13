@@ -7,6 +7,7 @@ export const loginState = atom({
     default: getItem('loginSuccess'),
 });
 
+
 export const loginStateSelector = selector({
     key: 'loginStateSelector',
     get: ({ get }) => {
@@ -28,14 +29,29 @@ export const loginStateSelector = selector({
     },
     set: ({ get, set }, newValue) => {},
 });
-
-export const userState = atom({
+type UserDataType = {
+    isAuth : boolean,
+    _id : string,
+    favorite : string [];
+}
+export const userState = atom<UserDataType>({
     key: 'userState',
     default: {
         isAuth: false,
         _id: '',
+        favorite : [],
     },
 });
+export const userUpdateFavorteArticle = selector({
+    key : 'userfavoriteArticle',
+    get : async ({get}) => {
+        
+
+    },
+    set : async ({get,set}, newValue) => {
+
+    }
+})
 
 export const userStateSelector = selector({
     key: 'userStateSelector',
@@ -94,3 +110,5 @@ export const userModifySelector = selector({
         });
     },
 });
+
+
